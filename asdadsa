@@ -1,0 +1,120 @@
+using System;
+using System.Collections.Generic;
+
+class Produto
+{
+    public string Nome { get; set; }
+    public int Quantidade { get; set; }
+    public double Preco { get; set; }
+
+    public Produto(string nome, int quantidade, double preco)
+    {
+        Nome = nome;
+        Quantidade = quantidade;
+        Preco = preco;
+    }
+
+    public override string ToString()
+    {
+        return $"Nome: {Nome} | Quantidade: {Quantidade} | Preço: R${Preco:F2}";
+    }
+}
+
+class Estoque
+{
+    private List<Produto> produtos;
+
+    public Estoque()
+    {
+        produtos = new List<Produto>();
+    }
+
+    public void AdicionarProduto(Produto produto)
+    {
+        produtos.Add(produto);
+    }
+
+    public void RemoverProduto(Produto produto)
+    {
+        produtos.Remove(produto);
+    }
+
+    public void MostrarEstoque()
+    {
+        Console.WriteLine("Produtos no estoque:");
+        foreach (Produto produto in produtos)
+        {
+            Console.WriteLine(produto);
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Estoque estoque = new Estoque();
+
+        Produto produto1 = new Produto("Camiseta", 50, 29.99);
+        Produto produto2 = new Produto("Calça Jeans", 30, 59.99);
+        Produto produto3 = new Produto("Tênis", 20, 99.99);
+
+        estoque.AdicionarProduto(produto1);
+        estoque.AdicionarProduto(produto2);
+        estoque.AdicionarProduto(produto3);
+
+        Console.WriteLine("Bem-vindo ao sistema de gerenciamento de estoque!\n");
+
+        while (true)
+        {
+            Console.WriteLine("\nOpções:");
+            Console.WriteLine("1 - Mostrar produtos no estoque");
+            Console.WriteLine("2 - Adicionar novo produto");
+            Console.WriteLine("3 - Remover produto");
+            Console.WriteLine("0 - Sair");
+
+            int opcao = Convert.ToInt32(Console.ReadLine());
+
+            switch (opcao)
+            {
+                case 1:
+                    estoque.MostrarEstoque();
+                    break;
+                case 2:
+                    Console.WriteLine("Digite o nome do novo produto:");
+                    string nome = Console.ReadLine();
+
+                    Console.WriteLine("Digite a quantidade:");
+                    int quantidade = Convert.ToInt32(Console.ReadLine());
+
+                    Console.WriteLine("Digite o preço:");
+                    double preco = Convert.ToDouble(Console.ReadLine());
+
+                    Produto novoProduto = new Produto(nome, quantidade, preco);
+                    estoque.AdicionarProduto(novoProduto);
+                    Console.WriteLine("Produto adicionado com sucesso!");
+                    break;
+                case 3:
+                    estoque.MostrarEstoque();
+                    Console.WriteLine("Digite o número do produto a ser removido:");
+                    int numeroProduto = Convert.ToInt32(Console.ReadLine());
+                    if (numeroProduto >= 0 && numeroProduto < estoque.Count)
+                    {
+                        estoque.RemoverProduto(estoque[numeroProduto]);
+                        Console.WriteLine("Produto removido com sucesso!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Número de produto inválido!");
+                    }
+                    break;
+                case 0:
+                    Console.WriteLine("Obrigado por usar o sistema de gerenciamento de estoque!");
+                    return;
+                default:
+                    Console.WriteLine("Opção inválida!");
+                    break;
+            }
+        }
+    }
+}
